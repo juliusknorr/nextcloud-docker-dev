@@ -14,7 +14,9 @@ on:
 jobs:
   push_to_registry:
     name: Build image
-    runs-on: ubuntu-latest
+    # FIXME: currently there are playwright issues with ubuntu-latest
+    # https://github.com/microsoft/playwright/issues/30368 closed but still an issue
+    runs-on: ubuntu-22.04
     if: github.repository == 'juliusknorr/nextcloud-docker-dev'
     strategy:
       fail-fast: false
@@ -76,10 +78,11 @@ jobs:
         with:
           push: false
           context: docker/
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64 #,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
             ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Start containers with docker compose
@@ -104,7 +107,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
-          node-version: 18
+          node-version: latest
       - name: Install dependencies
         if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
@@ -129,7 +132,7 @@ jobs:
         with:
           push: true
           context: docker/
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64 #,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
             ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
