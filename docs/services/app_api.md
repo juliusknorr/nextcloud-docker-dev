@@ -14,7 +14,7 @@ docker compose up -d appapi-dsp
 
 After the DSP container is running, configure the Deploy daemon in AppAPI admin settings with the following parameters:
 
-- **Host**: `http://nextcloud-appapi-dsp-http:2375`
+- **Host**: `http://appapi-dsp:2375`
 - **Nextcloud URL**: `http://nextcloud.local` (locally always use http)
 - **Enable https**: `false`
 - **Network**: `master_default` (the network of nextcloud-docker-dev docker-compose, by default it is `master_default`)
@@ -23,7 +23,7 @@ After the DSP container is running, configure the Deploy daemon in AppAPI admin 
 or via OCC CLI:
 
 ```bash
-./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_http "DSP HTTP" docker-install http "nextcloud-appapi-dsp-http" "http://nextcloud.local" --net=master_default --set-default
+./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_http "DSP" docker-install http "appapi-dsp:2375" "https://nextcloud.local" --set-default --haproxy_password some_secure_password --net nextcloud_default
 ```
 
 ## HTTPS AppAPI DSP
