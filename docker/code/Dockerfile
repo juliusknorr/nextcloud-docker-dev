@@ -1,1 +1,1 @@
-FROM collabora/code
+FROM docker.io/collabora/code

@@ -65,7 +65,7 @@ services:
       - host.docker.internal:host-gateway
 
   haproxy:
-    image: haproxy
+    image: docker.io/haproxy
     expose:
       - 80
     environment:
@@ -631,10 +631,10 @@ services:
       - host.docker.internal:host-gateway
 
   database-sqlite:
-    image: rwgrim/docker-noop
+    image: docker.io/rwgrim/docker-noop
 
   database-mysql:
-    image: mariadb:10.6
+    image: docker.io/mariadb:10.6
     environment:
       MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
@@ -680,7 +680,7 @@ services:
       # - MARIADB_MASTER_DELAY=10
 
   database-maxscale:
-    image: mariadb/maxscale:latest
+    image: docker.io/mariadb/maxscale:latest
     depends_on:
       - database-mariadb-primary
       - database-mariadb-replica
@@ -700,7 +700,7 @@ services:
       - postgres:/var/lib/postgresql
 
   database-oci:
-    image: gvenzl/oracle-free:23
+    image: docker.io/gvenzl/oracle-free:23
     environment:
       ORACLE_PASSWORD: oracle
     ports:
@@ -710,7 +710,7 @@ services:
 
   pgadmin:
     container_name: pgadmin_container
-    image: dpage/pgadmin4
+    image: docker.io/dpage/pgadmin4
     environment:
       VIRTUAL_HOST: "pgadmin${DOMAIN_SUFFIX}"
       PGADMIN_DEFAULT_EMAIL: pgadmin4@nextcloud.local
@@ -724,12 +724,12 @@ services:
       - ${PROXY_SERVICE:-proxy}
 
   redis:
-    image: redis:7
+    image: docker.io/redis:7
     volumes:
       - redis:/data
 
   ldap:
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     command: --copy-service --loglevel debug
     expose:
       - 389
@@ -743,7 +743,7 @@ services:
       - ./data/ldap:/container/service/slapd/assets/config/bootstrap/ldif/custom
 
   phpmyadmin:
-    image: phpmyadmin
+    image: docker.io/phpmyadmin
     environment:
       VIRTUAL_HOST: "phpmyadmin${DOMAIN_SUFFIX}"
       PMA_ARBITRARY: 1
@@ -752,7 +752,7 @@ services:
       PMA_PASSWORD: nextcloud
 
   ldapadmin:
-    image: osixia/phpldapadmin
+    image: docker.io/osixia/phpldapadmin
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: 'false'
@@ -760,7 +760,7 @@ services:
       - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}8:80"
 
   saml:
-    image: unicon/simplesamlphp
+    image: docker.io/unicon/simplesamlphp
     volumes:
       - ./docker/configs/var-simplesamlphp/config:/var/simplesamlphp/config
       - ./docker/configs/var-simplesamlphp/cert:/var/simplesamlphp/cert
@@ -784,7 +784,7 @@ services:
       MAIL_PASS: admin
 
   smb:
-    image: dperson/samba
+    image: docker.io/dperson/samba
     ports:
       - "${IP_BIND:-127.0.0.1}:139:139"
       - "${IP_BIND:-127.0.0.1}:445:445"
@@ -802,7 +802,7 @@ services:
       - smbhomes:/smb
 
   blackfire:
-    image: blackfire/blackfire:2
+    image: docker.io/blackfire/blackfire:2
     ports:
       - "${IP_BIND:-127.0.0.1}:8307:8307"
     environment:
@@ -813,7 +813,7 @@ services:
       - BLACKFIRE_DISABLE_LEGACY_PORT=yes
 
   collabora:
-    image: collabora/code:latest
+    image: docker.io/collabora/code:latest
     expose:
       - 9980
     cap_add:
@@ -853,19 +853,19 @@ services:
       tail -f /dev/null
 
   onlyoffice:
-    image: onlyoffice/documentserver:8.2
+    image: docker.io/onlyoffice/documentserver:8.2
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
       USE_UNAUTHORIZED_STORAGE: "true"
       JWT_SECRET: secret
     expose:
-      - '80'
+      - "80"
     volumes:
       - document_data:/var/www/onlyoffice/Data
       - document_log:/var/log/onlyoffice
 
   minio:
-    image: minio/minio
+    image: docker.io/minio/minio
     environment:
       VIRTUAL_HOST: minio${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9001
@@ -901,7 +901,7 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
   elasticsearch-ui:
-    image: appbaseio/dejavu
+    image: docker.io/appbaseio/dejavu
     ports:
       - "${IP_BIND:-127.0.0.1}:1358:1358"
     expose:
@@ -938,7 +938,7 @@ services:
       KC_PROXY: edge
 
   av:
-    image: mkodockx/docker-clamav:alpine
+    image: docker.io/mkodockx/docker-clamav:alpine
     container_name: nextav
     restart: unless-stopped
     volumes:
@@ -1046,14 +1046,14 @@ services:
 
 
   previews_hpb:
-    image: nextcloud/aio-imaginary:latest
+    image: docker.io/nextcloud/aio-imaginary:latest
     ports:
       - "${IP_BIND:-127.0.0.1}:8088:8088"
     environment:
       - PORT=8088
 
   talk-signaling:
-    image: strukturag/nextcloud-spreed-signaling:latest
+    image: docker.io/strukturag/nextcloud-spreed-signaling:latest
     environment:
       VIRTUAL_HOST: "talk-signaling${DOMAIN_SUFFIX}"
       HTTP_LISTEN: "0.0.0.0:80"
@@ -1070,7 +1070,7 @@ services:
     image: ghcr.io/juliusknorr/nextcloud-dev-talk-janus:latest
 
   talk-recording:
-    image: nextcloud/aio-talk-recording:latest
+    image: docker.io/nextcloud/aio-talk-recording:latest
     environment:
       NC_DOMAIN: "nextcloud${DOMAIN_SUFFIX}"
       ALLOW_ALL: "true"
