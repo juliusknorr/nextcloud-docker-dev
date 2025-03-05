@@ -1,1 +1,1 @@
-FROM dperson/samba:latest
+FROM docker.io/dperson/samba:latest
