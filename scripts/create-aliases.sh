@@ -10,7 +10,6 @@ aliasesFile="${SCRIPT_DIR}/aliases"
 
 # Configuration from CLI -- here comes the defaults
 selftest_alias_update=y
-test_aliases_file=
 command=create
 
 get_alias_content () {
