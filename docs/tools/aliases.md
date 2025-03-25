@@ -1,6 +1,6 @@
 # Aliases for simpler development under Linux
 
-To simplify the development and managment of the containers and various scripts, it is spossible to define aliases for convinience.
+To simplify the development and managment of the containers and various scripts, it is possible to define aliases for convinience.
 
 The aliases depend on your local development setup.
 Thus, there is a script in this repo that help with creating an aliases file.
@@ -53,6 +53,9 @@ For more details, see the output of `nc-mysql --help`.
 By default, the aliases file is located in `scripts/aliases` in this repository.
 The file is not checked in or exists by default and must be created.
 To simplify this, you can use the script `scripts/create-aliases.sh`.
+
+Please note, however, that the `bootstrap.sh` script already calls the `scripts/create-aliases.sh`.
+After bootstrapping (as suggested by the README) the aliases file therefore is automatically generated with the default settings.
 
 You can simply call the script in your shell.
 This will create the aliases file for in the default location.
