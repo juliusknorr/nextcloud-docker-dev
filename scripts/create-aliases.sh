@@ -85,6 +85,13 @@ You can now source this file in your shell:
 Then, the aliases will be available in your shell.
 
 You can as well put this source command in your .bashrc. That way, the aliases are available in all shells.
+To do so, the following snippet can be appended to your .bashrc:
+
+    # NC docker aliases
+    if [ -f "$aliasesFile" ]
+    then
+        source "$aliasesFile"
+    fi
 EOF
 }
 
