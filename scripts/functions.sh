@@ -11,7 +11,8 @@ function get_docker_compose_command() {
 }
 
 function docker_compose() {
-    local DCC=$(get_docker_compose_command)
+    local DCC
+    DCC=$(get_docker_compose_command)
     if [ -z "$DCC" ]; then
         echo "❌ Install docker-compose before running this script"
         exit 1
