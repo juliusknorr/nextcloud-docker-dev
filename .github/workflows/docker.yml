@@ -22,6 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         container:
+          - php84-fpm
           - php84
           - php83
           - php82
