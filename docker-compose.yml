@@ -1046,7 +1046,7 @@ services:
 
 
   previews_hpb:
-    image: nextcloud/aio-imaginary:latest
+    image: ghcr.io/nextcloud-releases/aio-imaginary:latest
     ports:
       - "${IP_BIND:-127.0.0.1}:8088:8088"
     environment:
@@ -1070,7 +1070,7 @@ services:
     image: ghcr.io/juliusknorr/nextcloud-dev-talk-janus:latest
 
   talk-recording:
-    image: nextcloud/aio-talk-recording:latest
+    image: ghcr.io/nextcloud-releases/aio-talk-recording:latest
     environment:
       NC_DOMAIN: "nextcloud${DOMAIN_SUFFIX}"
       ALLOW_ALL: "true"
