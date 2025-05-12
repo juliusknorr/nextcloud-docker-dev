@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
   # Proxy for ssl termination and easier hostname access
