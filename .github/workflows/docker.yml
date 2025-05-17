@@ -16,7 +16,7 @@ jobs:
     name: Build image
     # FIXME: currently there are playwright issues with ubuntu-latest
     # https://github.com/microsoft/playwright/issues/30368 closed but still an issue
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.repository == 'juliusknorr/nextcloud-docker-dev'
     strategy:
       fail-fast: false
