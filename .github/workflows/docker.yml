@@ -14,9 +14,7 @@ on:
 jobs:
   push_to_registry:
     name: Build image
-    # FIXME: currently there are playwright issues with ubuntu-latest
-    # https://github.com/microsoft/playwright/issues/30368 closed but still an issue
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: github.repository == 'juliusknorr/nextcloud-docker-dev'
     strategy:
       fail-fast: false
@@ -50,10 +48,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-        # TODO: remove this when https://github.com/actions/runner-images/issues/11471
-        with:
-          platforms: linux/arm64
-          image: tonistiigi/binfmt:qemu-v7.0.0-28
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Cache Docker layers
