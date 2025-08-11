@@ -1,6 +1,6 @@
 <?php
-$metadata['https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml/metadata'] = array (
-    'entityid' => 'https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml/metadata',
+$metadata['https://nextcloud.local/index.php/apps/user_saml/saml/metadata'] = array (
+    'entityid' => 'https://nextcloud.local/index.php/apps/user_saml/saml/metadata',
     'contacts' => 
     array (
     ),
@@ -11,7 +11,7 @@ $metadata['https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml
       0 => 
       array (
         'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'Location' => 'https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml/acs',
+        'Location' => 'https://nextcloud.local/index.php/apps/user_saml/saml/acs',
         'index' => 1,
       ),
     ),
@@ -20,7 +20,7 @@ $metadata['https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml
       0 => 
       array (
         'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-        'Location' => 'https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml/sls',
+        'Location' => 'https://nextcloud.local/index.php/apps/user_saml/saml/sls',
       ),
     ),
     'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
