@@ -8,7 +8,7 @@ services:
       - "${IP_BIND:-127.0.0.1}:${PROXY_PORT_HTTP:-80}:80"
       - "${IP_BIND:-127.0.0.1}:${PROXY_PORT_HTTPS:-443}:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ${DOCKER_SOCKET-/var/run/docker.sock}:/tmp/docker.sock:ro
       - ./data/ssl/:/etc/nginx/certs
       - ./data/nginx/vhost.d/:/etc/nginx/vhost.d
     environment:
@@ -1088,7 +1088,7 @@ services:
     container_name: nextcloud-appapi-dsp-http
     network_mode: ${NETWORK_MODE:-master_default}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET-/var/run/docker.sock}:/var/run/docker.sock
     environment:
       - NC_HAPROXY_PASSWORD=${NC_HAPROXY_PASSWORD:-some_secure_password}
       - BIND_ADDRESS=${BIND_ADDRESS:-}
@@ -1104,7 +1104,7 @@ services:
     container_name: nextcloud-appapi-dsp-https
     network_mode: ${NETWORK_MODE:-host}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET-/var/run/docker.sock}:/var/run/docker.sock
       - ${CERT_PATH:-./data/ssl/app_api/app_api.pem}:/certs/cert.pem
     environment:
       - NC_HAPROXY_PASSWORD=${NC_HAPROXY_PASSWORD:-some_secure_password}
