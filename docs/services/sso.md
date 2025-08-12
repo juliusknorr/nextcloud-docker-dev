@@ -4,6 +4,7 @@
 ## [Keycloak](https://www.keycloak.org/)
 
 - Keycloak is using LDAP as a user backend (make sure the LDAP container is also running)
+- If you have ssl enabled please modify the example realm config accordingly in `docker/configs/keycloak/Example-realm.json`
 - `occ user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d http://keycloak.dev.local/auth/realms/Example/.well-known/openid-configuration`
 - <http://keycloak.dev.local/auth/realms/Example/.well-known/openid-configuration>
 - nextcloud
