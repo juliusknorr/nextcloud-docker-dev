@@ -41,6 +41,7 @@ services:
           - stable30${DOMAIN_SUFFIX}
           - stable31${DOMAIN_SUFFIX}
           - mail${DOMAIN_SUFFIX}
+          - sso${DOMAIN_SUFFIX}
           - imap${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
