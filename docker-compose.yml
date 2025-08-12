@@ -633,7 +633,7 @@ services:
     image: rwgrim/docker-noop
 
   database-mysql:
-    image: mariadb:10.6
+    image: mariadb:12.0
     environment:
       MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
