@@ -648,7 +648,7 @@ services:
       - mysql:/var/lib/mysql
 
   database-mariadb-primary:
-    image: docker.io/bitnami/mariadb:10.6
+    image: docker.io/bitnami/mariadb:12.0
     ports:
       - "${IP_BIND:-127.0.0.1}:3306:3306"
     volumes:
@@ -663,7 +663,7 @@ services:
       - MARIADB_DATABASE=nextcloud
 
   database-mariadb-replica:
-    image: docker.io/bitnami/mariadb:10.6
+    image: docker.io/bitnami/mariadb:12.0
     ports:
       - "${IP_BIND:-127.0.0.1}:3306:3306"
     depends_on:
