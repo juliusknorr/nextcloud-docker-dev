@@ -89,8 +89,8 @@ jobs:
           ./bootstrap.sh
           PHP_VERSION=$(echo ${{ matrix.container }} | sed -e 's/^php//')
           echo "PHP_VERSION=${PHP_VERSION}" >> .env
-          # exit if php version is not numeric or below 80
-          if ! [[ $PHP_VERSION =~ ^[0-9]+$ ]] || [[ $PHP_VERSION -lt 80 ]] || [[ $PHP_VERSION -gt 83 ]]; then
+          # exit if php version is not numeric or below 80 or above 84 to only test against supported ones in server master
+          if ! [[ $PHP_VERSION =~ ^[0-9]+$ ]] || [[ $PHP_VERSION -lt 80 ]] || [[ $PHP_VERSION -gt 84 ]]; then
             exit 0
           fi
           docker compose up -d nextcloud
