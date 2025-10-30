@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.1
+FROM quay.io/keycloak/keycloak:26.4
 
 RUN mkdir -p /opt/keycloak/data/import
 
