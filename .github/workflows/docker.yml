@@ -33,6 +33,7 @@ jobs:
           - saml
           - nginx
           - elasticsearch
+          - keycloak
           - mailhog
           - ldap
           - lookupserver

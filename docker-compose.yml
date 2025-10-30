@@ -954,18 +954,21 @@ services:
       NEXTCLOUD_URL: http://nextcloud
 
   keycloak:
-    image: quay.io/keycloak/keycloak:26.1
+    image: ghcr.io/juliusknorr/nextcloud-dev-keycloak:latest
     expose:
       - 8080
-    volumes:
-      - ./docker/configs/keycloak:/opt/keycloak/data/import
-    command: start-dev --import-realm
+    # volumes:
+      # - ./docker/configs/keycloak:/opt/keycloak/data/import
+    command: start-dev --import-realm --http-enabled=true --proxy-headers xforwarded
     environment:
+      PROTOCOL: "${PROTOCOL:-http}"
+      DOMAIN_SUFFIX: "${DOMAIN_SUFFIX:-.local}"
       VIRTUAL_HOST: "keycloak${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8080
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      PROXY_ADDRESS_FORWARDING: "true"
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KEYCLOAK_PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_FRONTEND_URL: "${PROTOCOL:-http}://keycloak${DOMAIN_SUFFIX}"
       KC_PROXY: edge
 
   av:

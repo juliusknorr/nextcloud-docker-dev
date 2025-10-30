@@ -690,7 +690,7 @@
   }, {
     "id" : "555c2809-b153-4cf4-8bb1-a6306e5179c7",
     "clientId" : "http://nextcloud.local/index.php/apps/user_saml/saml/metadata",
-    "adminUrl" : "http://keycloak.dev.local/auth/realms/Example",
+    "adminUrl" : "http://keycloak.local/auth/realms/Example",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,
