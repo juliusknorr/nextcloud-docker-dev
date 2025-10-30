@@ -85,11 +85,11 @@ VOLUME /var/www/html/apps-writable
 VOLUME /var/www/html/config
 VOLUME /var/www/html/data
 
-ENV SQL sqlite
-ENV NEXTCLOUD_AUTOINSTALL YES
-ENV WITH_REDIS NO
+ENV SQL=sqlite
+ENV NEXTCLOUD_AUTOINSTALL=YES
+ENV WITH_REDIS=NO
 
-ENV WEBROOT /var/www/html
+ENV WEBROOT=/var/www/html
 WORKDIR /var/www/html
 
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
