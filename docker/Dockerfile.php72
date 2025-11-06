@@ -68,7 +68,7 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && apt-get update  \
     && (apt-get install -y --no-install-recommends blackfire \
 		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
-		|| echo "Skipped blackfire as the installation failed" \
+    ) || echo "Skipped blackfire as the installation failed" \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
