@@ -661,7 +661,7 @@ services:
       - host.docker.internal:host-gateway
 
   database-sqlite:
-    image: rwgrim/docker-noop
+    image: ghcr.io/juliusknorr/nextcloud-dev-noop:latest
 
   database-mysql:
     image: mariadb:10.6
