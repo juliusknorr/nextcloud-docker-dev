@@ -41,6 +41,7 @@ jobs:
           - codedev
           - code
           - talk-janus
+          - noop
     permissions:
       packages: write
       contents: read
