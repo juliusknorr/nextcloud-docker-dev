@@ -43,8 +43,8 @@ RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
     && export NVM_DIR="/root/.nvm" \
     && . "$NVM_DIR/nvm.sh" \
-    && nvm install 20 \
-    && nvm alias default 20
+    && nvm install node \
+    && nvm alias default node
 
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
@@ -68,7 +68,6 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && apt-get update  \
     && (apt-get install -y --no-install-recommends blackfire \
 		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
-		&& printf "\n\nblackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini) \
 		|| echo "Skipped blackfire as the installation failed" \
     && rm -rf /var/lib/apt/lists/*
 

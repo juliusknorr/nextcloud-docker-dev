@@ -68,7 +68,6 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && apt-get update  \
     && (apt-get install -y --no-install-recommends blackfire \
 		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
-		&& printf "\n\nblackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini) \
 		|| echo "Skipped blackfire as the installation failed" \
     && rm -rf /var/lib/apt/lists/*
 

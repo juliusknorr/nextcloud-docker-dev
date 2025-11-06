@@ -84,6 +84,19 @@ jobs:
             ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+      - name: Push container image
+        uses: docker/build-push-action@v6
+        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        with:
+          push: true
+          context: docker/
+          platforms: linux/amd64,linux/arm64
+          file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
+          tags: |
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.ref_name }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Start containers with docker compose
         run: |
           ./bootstrap.sh
@@ -125,19 +138,6 @@ jobs:
           name: playwright-report-${{ matrix.container }}
           path: tests/playwright-report/
           retention-days: 30
-      - name: Push container image
-        uses: docker/build-push-action@v6
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        with:
-          push: true
-          context: docker/
-          platforms: linux/amd64,linux/arm64
-          file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
-          tags: |
-            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
-            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.ref_name }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
