@@ -61,6 +61,7 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
+          - minio${DOMAIN_SUFFIX}
     extra_hosts:
       - host.docker.internal:host-gateway
 
@@ -899,10 +900,12 @@ services:
     image: minio/minio
     environment:
       VIRTUAL_HOST: minio${DOMAIN_SUFFIX}
-      VIRTUAL_PORT: 9001
+      VIRTUAL_PORT: 9000
       MINIO_ROOT_USER: nextcloud
       MINIO_ROOT_PASSWORD: nextcloud
       MINIO_BROWSER_REDIRECT_URL: ${PROTOCOL}://minio${DOMAIN_SUFFIX}
+    ports:
+      - "9001:9001"
     volumes:
       - objectstorage_minio:/data
     command: server /data --console-address :9001
