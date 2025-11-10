@@ -3,7 +3,7 @@ objectClass: inetOrgPerson
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
-cn: Hubert J. Farnsworth
+cn: Hubert J. Farnsworth (hermes@planetexpress.com)
 sn: Farnsworth
 description: Human
 displayName: Professor Farnsworth

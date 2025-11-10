@@ -43,6 +43,7 @@ services:
           - stable32${DOMAIN_SUFFIX}
           - mail${DOMAIN_SUFFIX}
           - sso${DOMAIN_SUFFIX}
+          - minio${DOMAIN_SUFFIX}
           - imap${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
@@ -679,6 +680,17 @@ services:
     volumes:
       - mysql:/var/lib/mysql
 
+  database-vitess:
+    image: vitess/base:v0.19.10
+    ports:
+      - "${IP_BIND:-127.0.0.1}:3306:3306"
+      - "${IP_BIND:-127.0.0.1}:9500:8000"
+    command: >
+      go run /vt/src/vitess.io/vitess/examples/demo/demo.go
+    extra_hosts:
+      - host.docker.internal:host-gateway
+# sh -c "ls /vt/src/vitess.io/vitess && cd /vt/src/vitess.io/vitess/examples/local && ./101_initial_cluster.sh"
+
   database-mariadb-primary:
     image: docker.io/bitnami/mariadb:10.6
     ports:
@@ -791,7 +803,9 @@ services:
       - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}8:80"
 
   saml:
-    image: unicon/simplesamlphp
+    build: 
+      context: ./docker/simplesamlphp
+      dockerfile: Dockerfile
     volumes:
       - ./docker/configs/var-simplesamlphp/config:/var/simplesamlphp/config
       - ./docker/configs/var-simplesamlphp/cert:/var/simplesamlphp/cert
@@ -826,8 +840,8 @@ services:
       USER3: "user2;user2"
       # -s "<name;/path>[;browse;readonly;guest;users;admins;writelist;comment]"
       SHARE: "public;/smbmount;yes;no;yes;all;admin;admin"
-      SHARE2: "user1;/smb/user1;yes;no;no;user1"
-      SHARE3: "user2;/smb/user2;yes;no;no;user2"
+      SHARE2: "user1;/smb/user1;yes;no;no;user1;user1"
+      SHARE3: "user2;/smb/user2;yes;no;no;user2;user1"
     volumes:
       - smb:/smbmount
       - smbhomes:/smb
