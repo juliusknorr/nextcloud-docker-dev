@@ -43,6 +43,7 @@ services:
           - stable32${DOMAIN_SUFFIX}
           - mail${DOMAIN_SUFFIX}
           - sso${DOMAIN_SUFFIX}
+          - minio${DOMAIN_SUFFIX}
           - imap${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
@@ -791,7 +792,7 @@ services:
       - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}8:80"
 
   saml:
-    image: unicon/simplesamlphp
+    image: unicon/simplesamlphp 
     volumes:
       - ./docker/configs/var-simplesamlphp/config:/var/simplesamlphp/config
       - ./docker/configs/var-simplesamlphp/cert:/var/simplesamlphp/cert
