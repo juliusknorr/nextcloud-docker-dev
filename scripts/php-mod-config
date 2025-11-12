@@ -17,7 +17,9 @@ fi
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 restart() {
+    echo "restart" $SCRIPT_DIR $1
     (cd "$SCRIPT_DIR/.." && docker_compose exec "$1" pkill -USR1 apache2)
+    echo "restart" $SCRIPT_DIR $1 done
 }
 
 docker_exec() {
@@ -48,11 +50,14 @@ then
         echo "Setting $2 to $3"
         value="${3//\//\\\/}"
         docker_exec "$1" sed -i 's/^'"$2"'\s*=\s*.*/'"$2"'='"$value"'/g' /usr/local/etc/php/conf.d/xdebug.ini
+        echo "Setting $2 to $3 done"
     else
         echo "No value provided"
         exit 1
     fi
+    echo "restart"
     restart "$1"
+    echo "restart done"
     docker_exec "$1" cat /usr/local/etc/php/conf.d/xdebug.ini
     exit 0
 fi
