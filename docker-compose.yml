@@ -43,6 +43,7 @@ services:
           - stable32${DOMAIN_SUFFIX}
           - mail${DOMAIN_SUFFIX}
           - sso${DOMAIN_SUFFIX}
+          - minio${DOMAIN_SUFFIX}
           - imap${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
@@ -61,6 +62,7 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
+          - minio${DOMAIN_SUFFIX}
     extra_hosts:
       - host.docker.internal:host-gateway
 
@@ -790,7 +792,7 @@ services:
       - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}8:80"
 
   saml:
-    image: unicon/simplesamlphp
+    image: unicon/simplesamlphp 
     volumes:
       - ./docker/configs/var-simplesamlphp/config:/var/simplesamlphp/config
       - ./docker/configs/var-simplesamlphp/cert:/var/simplesamlphp/cert
@@ -899,10 +901,12 @@ services:
     image: minio/minio
     environment:
       VIRTUAL_HOST: minio${DOMAIN_SUFFIX}
-      VIRTUAL_PORT: 9001
+      VIRTUAL_PORT: 9000
       MINIO_ROOT_USER: nextcloud
       MINIO_ROOT_PASSWORD: nextcloud
       MINIO_BROWSER_REDIRECT_URL: ${PROTOCOL}://minio${DOMAIN_SUFFIX}
+    ports:
+      - "9001:9001"
     volumes:
       - objectstorage_minio:/data
     command: server /data --console-address :9001
