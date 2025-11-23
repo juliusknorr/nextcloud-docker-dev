@@ -27,9 +27,28 @@ RUN install-php-extensions \
     blackfire \
     @composer
 
+RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
+    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
+
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim nano sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
+    git \
+    curl \
+    vim \
+    nano \
+    sudo \
+    cron \
+    smbclient \
+    iproute2 \
+    lnav \
+    wget \
+    iputils-ping \
+    gnupg2 \
+    jq \
+    ripgrep \
+    rsync \
+    mariadb-client \
+    blackfire \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
@@ -63,13 +82,7 @@ ADD configs/php/nextcloud.ini /usr/local/etc/php/conf.d/nextcloud.ini
 ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Setup blackfire probe
-RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
-    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update  \
-    && (apt-get install -y --no-install-recommends blackfire \
-		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
-    ) || echo "Skipped blackfire as the installation failed" \
-    && rm -rf /var/lib/apt/lists/*
+RUN mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 

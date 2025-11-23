@@ -29,3 +29,5 @@ occ onlyoffice:documentserver --check
 
 
 docker_compose exec onlyoffice /var/www/onlyoffice/documentserver/npm/json -f /etc/onlyoffice/documentserver/local.json 'services.CoAuthoring.secret.session.string'
+
+docker_compose exec onlyoffice supervisorctl start ds:example
