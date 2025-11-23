@@ -29,22 +29,37 @@ RUN install-php-extensions \
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim nano sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
+    git \
+    curl \
+    vim-tiny \
+    nano \
+    sudo \
+    cron \
+    smbclient \
+    iproute2 \
+    lnav \
+    wget \
+    iputils-ping \
+    gnupg2 \
+    jq \
+    ripgrep \
+    rsync \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
-RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
-    && chmod +x /usr/local/bin/phpunit8 \
-    && wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar \
-    && chmod +x /usr/local/bin/phpunit9 \
-    && ln -s /usr/local/bin/phpunit9 /usr/local/bin/phpunit
+RUN wget -O /usr/local/bin/phpunit11 https://phar.phpunit.de/phpunit-11.phar \
+    && chmod +x /usr/local/bin/phpunit11 \
+    && wget -O /usr/local/bin/phpunit12 https://phar.phpunit.de/phpunit-12.phar \
+    && chmod +x /usr/local/bin/phpunit12 \
+    && ln -s /usr/local/bin/phpunit11 /usr/local/bin/phpunit
 
 # Install NVM
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
     && export NVM_DIR="/root/.nvm" \
     && . "$NVM_DIR/nvm.sh" \
     && nvm install node \
-    && nvm alias default node
+    && nvm alias default node \
+    && nvm cache clear
 
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
@@ -63,13 +78,7 @@ ADD configs/php/nextcloud.ini /usr/local/etc/php/conf.d/nextcloud.ini
 ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Setup blackfire probe
-RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
-    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update  \
-    && (apt-get install -y --no-install-recommends blackfire \
-		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
-    ) || echo "Skipped blackfire as the installation failed" \
-    && rm -rf /var/lib/apt/lists/*
+RUN mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 

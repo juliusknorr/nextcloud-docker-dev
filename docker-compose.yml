@@ -782,6 +782,7 @@ services:
       PMA_HOST: database-mysql
       PMA_USER: root
       PMA_PASSWORD: nextcloud
+      UPLOAD_LIMIT: 512M
 
   ldapadmin:
     image: osixia/phpldapadmin
