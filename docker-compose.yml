@@ -62,7 +62,6 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
-          - minio${DOMAIN_SUFFIX}
     extra_hosts:
       - host.docker.internal:host-gateway
 
