@@ -62,6 +62,7 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
+          - windmill${DOMAIN_SUFFIX}
     extra_hosts:
       - host.docker.internal:host-gateway
 
@@ -1155,6 +1156,86 @@ services:
       - EX_APPS_NET=${EX_APPS_NET:-ipv4@localhost}
       - EX_APPS_COUNT=${EX_APPS_COUNT:-50}
 
+  # -----------------------------
+  # Windmill (server, workers, DB, LSP)
+  # -----------------------------
+  windmill-db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: windmill
+    volumes:
+      - windmill_pgdata:/var/lib/postgresql/data
+    ports:
+      - "${IP_BIND:-127.0.0.1}:5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  windmill-server:
+    image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill:main}
+    restart: unless-stopped
+    environment:
+      MODE: server
+      DATABASE_URL: postgresql://postgres:changeme@windmill-db:5432/windmill?sslmode=disable
+      # publish via the stack nginx-proxy on windmill${DOMAIN_SUFFIX}
+      VIRTUAL_HOST: "windmill${DOMAIN_SUFFIX}"
+      VIRTUAL_PORT: 8000
+      VIRTUAL_PROTO: http
+      RUN_UPDATE_CA_CERTIFICATE_AT_START: true
+    depends_on:
+      - windmill-db
+      - ${PROXY_SERVICE:-proxy}
+    expose:
+      - "8000"
+      - "2525"
+    volumes:
+      - windmill_worker_logs:/tmp/windmill/logs
+      - ./data/ssl:/usr/local/share/ca-certificates:ro
+
+  windmill-worker:
+    image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill:main}
+    restart: unless-stopped
+    environment:
+      MODE: worker
+      WORKER_GROUP: default
+      DATABASE_URL: postgresql://postgres:changeme@windmill-db:5432/windmill?sslmode=disable
+      RUN_UPDATE_CA_CERTIFICATE_AT_START: true
+    depends_on:
+      - windmill-db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - windmill_worker_cache:/tmp/windmill/cache
+      - windmill_worker_logs:/tmp/windmill/logs
+      - ./data/ssl:/usr/local/share/ca-certificates:ro
+
+  windmill-worker-native:
+    image: ${WM_IMAGE:-ghcr.io/windmill-labs/windmill:main}
+    restart: unless-stopped
+    environment:
+      MODE: worker
+      WORKER_GROUP: native
+      NUM_WORKERS: "8"
+      SLEEP_QUEUE: "200"
+      DATABASE_URL: postgresql://postgres:changeme@windmill-db:5432/windmill?sslmode=disable
+      RUN_UPDATE_CA_CERTIFICATE_AT_START: true
+    depends_on:
+      - windmill-db
+    volumes:
+      - windmill_worker_logs:/tmp/windmill/logs
+      - ./data/ssl:/usr/local/share/ca-certificates:ro
+
+  windmill-lsp:
+    image: ghcr.io/windmill-labs/windmill-lsp:latest
+    restart: unless-stopped
+    expose:
+      - "3001"
+    volumes:
+      - windmill_lsp_cache:/pyls/.cache
 
 volumes:
   data:
@@ -1178,6 +1259,10 @@ volumes:
   elasticsearch_data:
   clam:
   mariadb_primary_data:
+  windmill_pgdata:
+  windmill_worker_cache:
+  windmill_worker_logs:
+  windmill_lsp_cache:
 
 networks:
   default:
