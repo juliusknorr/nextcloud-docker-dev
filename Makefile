@@ -56,6 +56,7 @@ template-apply:
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.2/' > docker/php82/Dockerfile
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.3/' > docker/php83/Dockerfile
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.4/' > docker/php84/Dockerfile
+	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.5/' > docker/php85/Dockerfile
 
 docs:
 	pip3 install mkdocs
