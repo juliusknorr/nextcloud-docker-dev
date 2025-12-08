@@ -62,6 +62,7 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
+          - authentik${DOMAIN_SUFFIX}
     extra_hosts:
       - host.docker.internal:host-gateway
 
@@ -1155,6 +1156,69 @@ services:
       - EX_APPS_NET=${EX_APPS_NET:-ipv4@localhost}
       - EX_APPS_COUNT=${EX_APPS_COUNT:-50}
 
+  authentik-postgresql:
+    env_file:
+    - .env
+    environment:
+      POSTGRES_DB: ${PG_DB:-authentik}
+      POSTGRES_PASSWORD: authentik-database
+      POSTGRES_USER: ${PG_USER:-authentik}
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      timeout: 5s
+    image: docker.io/library/postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+    - authentik-database:/var/lib/postgresql/data
+  authentik-worker:
+    command: worker
+    depends_on:
+      authentik-postgresql:
+        condition: service_healthy
+    env_file:
+    - .env
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgresql
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: authentik-database
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_SECRET_KEY: authentik-secret
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.2}
+    restart: unless-stopped
+    user: root
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./authentik-media:/media
+    - ./authentik-certs:/certs
+    - ./authentik-custom-templates:/templates
+
+  authentik:
+    command: server
+    depends_on:
+      authentik-postgresql:
+        condition: service_healthy
+      authentik-worker:
+        condition: service_healthy
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: authentik-postgresql
+      AUTHENTIK_POSTGRESQL__NAME: ${PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: authentik-database
+      AUTHENTIK_POSTGRESQL__USER: ${PG_USER:-authentik}
+      AUTHENTIK_SECRET_KEY: authentik-secret
+      VIRTUAL_HOST: "authentik${DOMAIN_SUFFIX}"
+      VIRTUAL_PORT: 9000
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2025.10.2}
+    ports:
+      - ${COMPOSE_PORT_HTTP:-9000}:9000
+    restart: unless-stopped
+    volumes:
+    - ./authentik-media:/media
+    - ./authentik-custom-templates:/templates
 
 volumes:
   data:
@@ -1178,6 +1242,8 @@ volumes:
   elasticsearch_data:
   clam:
   mariadb_primary_data:
+  authentik-database:
+    driver: local
 
 networks:
   default:
