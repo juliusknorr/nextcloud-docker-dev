@@ -1,0 +1,5 @@
+location /exapps/ {
+  set $harp_addr appapi-harp:8780;
+  proxy_pass http://$harp_addr;
+}
+
