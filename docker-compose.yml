@@ -912,6 +912,20 @@ services:
       - objectstorage_minio:/data
     command: server /data --console-address :9001
 
+  rustfs:
+    image: rustfs/rustfs:latest
+    environment:
+      VIRTUAL_HOST: rustfs${DOMAIN_SUFFIX}
+      VIRTUAL_PORT: 9000
+      RUSTFS_ACCESS_KEY: nextcloud
+      RUSTFS_SECRET_KEY: nextcloud
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports:
+      - "9010:9000"
+      - "9011:9001"
+    volumes:
+      - objectstorage_rustfs:/data
+
   elasticsearch:
     build:
       context: ./docker
@@ -1237,6 +1251,7 @@ volumes:
   document_data:
   document_log:
   objectstorage_minio:
+  objectstorage_rustfs:
   smb:
   smbhomes:
   elasticsearch_data:
