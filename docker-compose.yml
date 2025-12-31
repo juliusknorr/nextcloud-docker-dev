@@ -44,6 +44,7 @@ services:
           - mail${DOMAIN_SUFFIX}
           - sso${DOMAIN_SUFFIX}
           - minio${DOMAIN_SUFFIX}
+          - rustfs${DOMAIN_SUFFIX}
           - imap${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
@@ -916,13 +917,10 @@ services:
     image: rustfs/rustfs:latest
     environment:
       VIRTUAL_HOST: rustfs${DOMAIN_SUFFIX}
-      VIRTUAL_PORT: 9000
+      VIRTUAL_PORT: 9001
       RUSTFS_ACCESS_KEY: nextcloud
       RUSTFS_SECRET_KEY: nextcloud
       RUSTFS_CONSOLE_ENABLE: "true"
-    ports:
-      - "9010:9000"
-      - "9011:9001"
     volumes:
       - objectstorage_rustfs:/data
 
