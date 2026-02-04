@@ -227,7 +227,11 @@ configure_add_user() {
 
 
 install() {
-	DBNAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
+	if [ -n "$VIRTUAL_HOST" ]; then
+		DBNAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
+	else
+		DBNAME="nextcloud"
+	fi
 	SQLHOST="database-$SQL"
 	echo "database name will be $DBNAME"
 
