@@ -112,7 +112,7 @@ services:
   nextcloud2:
     image: ghcr.io/juliusknorr/nextcloud-dev-php${PHP_VERSION:-82}:latest
     environment:
-      SQL: 'mysql'
+      SQL: ${SQL:-mysql}
       VIRTUAL_HOST: "nextcloud2${DOMAIN_SUFFIX}"
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
