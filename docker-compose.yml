@@ -1021,7 +1021,7 @@ services:
       KC_PROXY: edge
 
   av:
-    image: mkodockx/docker-clamav:alpine
+    image: clamav/clamav:stable
     container_name: nextav
     restart: unless-stopped
     volumes:
